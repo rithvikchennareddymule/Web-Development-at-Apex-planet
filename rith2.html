@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎵 Favorite Songs with Cover & Background</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: url('RS_500_Great_Songs_1800x1200.webp') no-repeat center center fixed;
+      background-size: cover;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    form input[type="text"],
+    form input[type="file"] {
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    form input[type="submit"] {
+      grid-column: span 2;
+      padding: 10px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    form input[type="submit"]:hover {
+      background: #2980b9;
+    }
+
+    .error {
+      grid-column: span 2;
+      color: red;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: #ecf0f1;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .song-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .song-info img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .remove {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      form {
+        grid-template-columns: 1fr;
+      }
+
+      li {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎵 Favorite Songs with Cover Images</h1>
+    </header>
+
+    <form id="songForm">
+      <input type="text" id="songName" placeholder="Song Name" required />
+      <input type="text" id="artistName" placeholder="Artist Name" required />
+      <input type="file" id="coverImage" accept="image/*" />
+      <input type="submit" value="Add Song" />
+      <p class="error" id="formError"></p>
+    </form>
+
+    <ul id="songs"></ul>
+  </div>
+
+  <script>
+    document.getElementById("songForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const songName = document.getElementById("songName").value.trim();
+      const artistName = document.getElementById("artistName").value.trim();
+      const coverFile = document.getElementById("coverImage").files[0];
+      const errorElem = document.getElementById("formError");
+
+      if (!songName || !artistName) {
+        errorElem.textContent = "Please enter both song and artist name.";
+        return;
+      }
+
+      errorElem.textContent = "";
+
+      const li = document.createElement("li");
+
+      const songInfo = document.createElement("div");
+      songInfo.className = "song-info";
+
+      if (coverFile) {
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(coverFile);
+        img.alt = "Cover";
+        songInfo.appendChild(img);
+      }
+
+      const text = document.createElement("span");
+      text.textContent = `${songName} - ${artistName}`;
+      songInfo.appendChild(text);
+
+      const removeBtn = document.createElement("button");
+      removeBtn.textContent = "Remove";
+      removeBtn.className = "remove";
+      removeBtn.onclick = () => li.remove();
+
+      li.appendChild(songInfo);
+      li.appendChild(removeBtn);
+      document.getElementById("songs").appendChild(li);
+
+      document.getElementById("songForm").reset();
+    });
+  </script>
+</body>
+</html>
